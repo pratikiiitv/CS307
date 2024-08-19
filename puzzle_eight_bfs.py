@@ -2,6 +2,9 @@ from collections import deque
 import numpy as np
 import random
 
+# This is a demonstration code only
+
+
 # Find indices of the value
 class Node:
     def __init__(self, state, parent=None):
