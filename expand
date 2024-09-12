@@ -1,0 +1,185 @@
+Module 1
+Week 1
+20/08/2024 Lecture 1 : Review of Data Structure and Python
+22/08/2024 Did not conduct
+
+Week 2
+27/08/2024 Lecture 2 : BFS and DFS, Missionaries and Cannibals
+28/09/2024 Lab 1 : Demonstration - Hands-on coding for Puzzle - 8 
+29/09/2024 Lecture 3 : Dijkstra and role of a Heuristic function
+
+Week 3
+03/09/2024 Lecture 4 : Hands-on Heuristic Search (Dijkstra/ Best First and f = g+h)
+04/09/2024 Lab 2 : Demonstration - How to formulate Heuristic - relaxing the constraint
+05/09/2024 Lecture 5 : Introduction to AI, Review of Uninformed and Informed Search Hands-on A*, Consistent and Admissible heuristic, State Space Search Algorithm: completeness, complexity, optimality
+
+Week 4
+10/09/2024 Lecture 6 : 
+Logistics: Group project statements, Modalities, Doubt solving hours, NVIDIA Workshop Dates
+Branch and Bound, Example: Integer Programming
+
+Case of a machine shop expansion:
+You are the owner of a machine shop. You are planning for an expansion by purchasing some new machies - presses and lathes. You have estimated that each press is going to increase your profit by 100 INR/ Day, and each lathe will increase your profit by 150 INR/ Day. The cost of procurment of each machine and floor space required are as follows:
+Press, 15 sqft, 8000 INR
+Lathe, 30 sqft, 4000 INR
+You have a budget of 40000 INR for purchasing machines and 200 sqft of available floor space.
+? How many machines of each type would you procure for maximizing your daily increase in profit
+
+Objective Function: 
+100*x1 + 150*x2
+Constraints: 
+8000*x1 + 4000*x2 <= 40000
+15*x1 + 30*x2 <= 200
+
+Zero sum game, Adversarial Search
+Alpha-Beta Pruning, Case Study from Evolutionary Biology 
+11/09/2024 Lab 3 : Branch-Bound, Alpha-Beta Pruning
+
+Case of machine shop expansion
+f(x1,x2) = 100*x1 + 150*x2
+c1:= 8000*x1 + 4000*x2 <= 40000, c2:= 15*x1 + 30*x2 <= 200 
+
+Root Node:
+max f(x1,x2)
+s.t. x1>=0, x2>=0, c1, c2
+UB: x1 = 2.22, x2 = 5.56, f(x1,x2)=1055.56 
+LB: x1 = 2, x2 = 5, f(x1,x2) = 950
+
+R1                                  R2
+x2<=5                               x2>=6
+UB: x1 = 2.5, x2 = 5, f = 1000      UB: x1 = 1.33 , x2 = 6, f = 1033.33 
+LB: x1 = 2, x2 = 5, f = 950         LB: x1 = 1, x2 = 6, f = 1000
+
+R21                                 R22 (infeasible)
+x1<=1                               x1>=2
+UB: x1 = 1, x2 = 6.16, f = 1025     
+LB: x1 = 1, x2 = 6, f = 1000        
+
+R211                                R212 (infeasible)
+x2 <= 6                             x2 >= 7
+UB: x1 = 1, x2 = 6, f = 1000        
+LB: x1 = 1, x2 = 6, f = 1000        
+
+12/09/2024 Lecture 7 : Simulated Annealing 1 - Substitution Cypher, TSP, Knap-Sack 
+
+Case of Decyphering Text (Substitution Cypher):
+OLRA OL U DUNT WSLEAN,G DUK, WMAL EMA KAJJOW BOI MFLI GO EMSRT ULD MAUQK SL EMA GENAAEG OB JOLDOL EMUE EMA JUCPG WANA JSIMEAD ULD EMA GMOP WSLDOWG HJUZAD WSEM IUG UG EMAK DO UE LSIME, UL ODD-JOOTSLI JSEEJA ISNJ GUE SL U RUH WSEM MAN BUEMAN ULD WUG DNSQAL NUEMAN GJOWJK EMNOFIM EMA HSI EMONOFIMBUNAG. GMA GUE WSEM MAN BAAE EFRTAD FLDAN MAN, ULD JAULAD UIUSLGE MAN BUEMAN, WMO MAJD MAN SL MSG UNC, UG GMA GEUNAD OFE OB EMA WSLDOW UE EMA PUGGSLI PAOPJA WSEM U XFAAN OJD-BUGMSOLAD EMOFIMEBFJLAGG SL MAN HSI AKAG. GMA WUG GFRM U JSEEJA ISNJ EMUE OLA DSD LOE AVPARE EO GAA GFRM U JOOT OL MAN GCUJJ BURA.  SE WOFJD MUQA HAAL UL OJD JOOT BON U RMSJD OB EWAJQA, ULD GUNU RNAWA WUG OLJK GAQAL.  EMA BURE WUG, MOWAQAN, EMUE GMA WUG UJWUKG DNAUCSLI ULD EMSLTSLI ODD EMSLIG ULD ROFJD LOE MANGAJB NACACHAN ULK ESCA WMAL GMA MUD LOE HAAL EMSLTSLI EMSLIG UHOFE INOWL-FP PAOPJA ULD EMA WONJD EMAK HAJOLIAD EO. GMA BAJE UG SB GMA MUD JSQAD U JOLI, JOLI ESCA. UE EMSG COCALE GMA WUG NACACHANSLI EMA QOKUIA GMA MUD YFGE CUDA BNOC HOCHUK WSEM MAN BUEMAN, RUPEUSL RNAWA.  GMA WUG EMSLTSLI OB EMA HSI GMSP, OB EMA JUGRUNG PUGGSLI GSJALEJK EO ULD BNO OL SE, OB EMA RMSJDNAL PJUKSLI UHOFE OL EMA MOE DART, ULD OB GOCA KOFLI OBBSRANG. WSQAG WMO FGAD EO ENK EO CUTA MAN EUJT EO EMAC ULD JUFIM UE EMA EMSLIG GMA GUSD.
+
+Case of Swiggy for Delivery Route Optimization
+
+Case of xPress Courier 
+
+Beyond Classical Search
+Local Search Methods - Markov Methods
+Markovian Property : X_1 X_2 X_3 X_4 ...
+P(X_k+1 | X_1, X_2, ..., X_k) = P(X_k+1 | X_k)
+
+f(x) = x^2 - x + 1
+df/dx = f'(x) = 0 Derivative should vanish
+d^2f/dx^2 = f''(x) > 0 ? minima, < 0 maxima
+
+f : R -> R
+f : Z6 -> Q
+f : Z_26! -> Q
+f : Domain -> Range
+
+(f, Neighborhood on Domain)
+Objective is to maximmize/ minimize f
+But you are ok with Local Optimal!
+
+start with random x_0
+    while flag == 1 # neighborhood elements are all checked and found optimal
+        x \in N(x_0)
+        if f(x_0) < f(x)
+            x_0 = x
+
+abcd 
+bacd abdc
+badc
+
+X(n)
+Domain: 0 1 2 3 4 5 6 7 8 9
+Range:  1 2 3 2 1 2 4 6 2 1
+(Minimization)
+1. Given (S: Search Space/ Domain, f: Objective function)
+2. Initialize s_i \in S
+3. Pick s_j \in N(s_i)
+4. If f(s_j) < f(s_i) then replace current state s_i with s_j
+5. If f(s_j) >= f(s_i) then check for all s_j \in N(s_i) break
+6. Go to step 2
+
+Definition: A state s* \in S is called a local minimum/ maximum (optimum) w.r.t. N for (S,f) if f(s*) <=/ >= f(s), for all s \in N(s*).
+
+Metropolis Hastings Algorithm (Local Search)
+1953 - Metropolis, Rosenbluth, Teller
+Simulated Annealing
+5. If f(s_j)>=f(s_i) then accepting s_j with probability p
+p is proportional to exp(-(f(s_j)-f(s_i)/c))
+
+What is 
+P(x2 = u | x1 = q) = 1
+P(x2 = a | x1 = q) = 0
+
+P(x2|x1) where x1, x2 are the english alphabets 
+
+P(junary | Lang = English)
+P(x1, x2, x3, x4, x5, x6 | Lang = English)
+considering Markovian property
+P(x1)P(x2|x1)P(x3|x2)P(x4|x3)P(x5|x4)P(x6|x5)
+
+Dasher? David Mckay
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(Genetic algorithm as home assignment)
+
+
+Week 5
+17/09/2024 Lecture 8 : Probabilistic Reasoning and Inference, Undirected Graphical Model, Probabilistic Programming Language
+18/09/2024 Lab 4 : Directed Graphical Models, Hidden Markov Model - Part 1
+19/09/2024 Lecture 9 : Hidden Markov Model - Part 2
+
+Week 6
+24/09/2024 Lecture 10 : Introduction to Neural Network
+25/09/2024 Lab 5 : 
+26/09/2024 Lecture 11 :
+
+27/09/2024 5 PM : Submission of First Laboratory Report with solution to any four challenge problems from the lab manual.
+
+Week 7 
+01/10/2024 Lecture 12 : 
+03/10/2024 Lecture 13 : 
+
+Week 8 
+Mid-semester Examination
+
+
+
+State Space Search (Graph Search, Informed)
+    Robotic arm path planning
+    Scheduling
+    Text alignment
+    RoS navigation turtlebot
+    Puzzle eight
+    
+
+
+
+
+
