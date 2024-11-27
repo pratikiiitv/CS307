@@ -1,0 +1,50 @@
+Decision Making:
+
+Axioms of Uitility
+
+1. Orderability
+A > B
+A ~ B
+B > A
+
+2. Transitivity
+A > B and B > C -> A > C
+
+3. Continuity
+A > B > C -> p: [p,A; (1-p),C] ~ B
+pE[A]+(1-p)E[C]
+p(p1A*S1+p2A*S2)+(1-p)(p1C*S1+p2C*S2)
+
+4. Substitutability
+A ~ B
+[p,A; (1-p),C] ~ [p,B; (1-p),C]
+
+5. Monotonicity
+A > B, p > q
+[p,A; (1-p),B] > [q,A; (1-q),B]
+
+6. Decomposability
+[p,A; (1-p)[q,B; (1-q),C]] ~ [p,A; (1-p)q,B; (1-p)(1-q),C]
+
+von Neumann [1944]
+Existence of Utility Function
+If the agent's preferences obey the axioms of utility, then there exists a function U such that U(A) > U(B) iff A > B, and U(A) = U(B) iff A~B.
+
+U(A)= p_i U(S_i)
+
+Examples
+Lottery : L 
+Outputs : {S1,...,Sn}
+Prob Dis : {p1,...,pn}
+A, B are two lotteries
+Expected value = p_i*U(S_i)
+
+(A) micromort
+(B) QALY
+
+Regret vs Expected Utility
+Unknown vs Certain
+Anchoring!
+
+
+
