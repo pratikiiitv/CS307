@@ -90,3 +90,82 @@ Node_under_cons         Frontier(FIFO)          Visited
 12/08/2025
 Lec 3
 
+Flatland - Romance of many dimensions
+Edwin Abott
+
+GIT: pratikiiitv/cs307
+three_jugs_bfs.py
+
+Puzzle-8 Problem
+Size of state space? 
+Informed Search : Heuristic function
+value function of a node 
+f(node) = g(node) + h(node)
+g - actual distance of node from the initial state
+h - estimated distance to goal from the current node
+
+12/08/2025
+Lab 1 (S2, S1/S3)
+Demonstration of Puzzle-8 BFS/ DFS
+
+14/08/2025
+Lec 4
+Informed Search Agent
+Heuristic Function
+f = g + h
+f : {set of nodes} -> \mathbb{R}^+
+How to design h?
+
+(1) Relaxed problem
+Movement not restricted to plane!
+[1 2 3 4 5 6 7 8 0] -> [0 2 3 4 5 6 7 8 1]
+Init -> Goal
+h(n) = number of misplaced tiles
+
+(2) Effort required to solve partially/ subproblem
+[1 2 3 4 * * * * 0] -> [0 2 3 4 * * * * 1]
+
+(3) Landmarks {L_i}i\in I
+d(n, L_i), \forall n
+Init -> Goal
+h(Init) = min_i {d(Init,L_i) + d(L_i, Goal)}
+
+Heuristic function - underestimates the actual distance to 
+goal - the search agent with forntier prioritized by 
+f=g+h will always return an optimal path (if it exists) to
+the goal state.
+
+"A-star" 
+
+Search Agent/ Algorithm attributes
+1. Completeness
+2. Optimality
+3. Complexity - Time/ Space
+
+BFS - b-branching factor is finite and solution is at a finite
+depth BFS is complete, BFS is optimal
+DFS - is not complete - is not optimal
+A-star - is complete and optimal
+
+Admissible Heuristic - h(n) <= d(n,G), \forall n
+
+Proof by contradiction:
+Let us assume that the solution that the agent returns is not
+optimal and the length is C. The heuristic function used is 
+admissible. h(.) <= d(.,Goal) 
+
+Let the optimal distance from Init to Goal is C*
+C > C*
+\exists n on optimal path in frontier which was not popped!
+f(n) = g(n) + h(n) > C ---(1)
+but h(n) <= C* - g(n) ---(2)/ admissibility of heuristic h
+=><= Contradiction!
+
+Quiz 2:
+variants : f = w1*g+w2*hi
+Find path from S to G using h1 - Manhattan Distance 
+Find path from S to G using h2 - Euclidean Distance 
+w1 = 1, w2 = 0 (Dijkstra)
+w1 = w2 = 1 (A*)
+w1 = 0, w2 = 1 (Greedy search agent)
+
