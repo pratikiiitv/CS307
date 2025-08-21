@@ -169,3 +169,128 @@ w1 = 1, w2 = 0 (Dijkstra)
 w1 = w2 = 1 (A*)
 w1 = 0, w2 = 1 (Greedy search agent)
 
+18/08/2025
+Lec 5
+
+Local Search
+(S, N, f)
+S: Set of states
+N: Neighborhood defination
+f: Objective function f:S->\mathbb{R}
+find s*\in S, s.t. f(s*) <= f(s), \forall s\in S
+s* is referred to as minimum.
+
+init s_old
+for neighbor s in neighborhood (s_old)
+    if f(s) <= f(s_old) then return s_old = s
+    return s_old as minumum
+
+s\in N(s_old)
+f(s) <= f(s_old) then accept s as a better state
+
+Metropolis Algorithm
+1953 Metropolis, Rosenbluth, Teller
+Simulated Annealing
+
+s\in N(s_old)
+f(s) <= f(s_old) then accept s as a better state
+
+even if f(s) > f(s_old)
+accept s as the next state to explore from with
+a probability p = exp[-(f(s)-f(s_old))/c]
+
+It is like a random walk in the state space S
+s_0, s_1, s_2, s_3, s_4, ..., s_(N-1)
+
+p(s) = (#s_i==s)/N \proportional exp[-f(s)]
+
+Ex. Knapsack
+
+Ex. TSP
+
+Ex. Decoding substitution cypher
+Language Model - Dasher, David McKay
+https://www.inference.org.uk/dasher/
+
+Piece of text in English Language
+x_0, x_1, x_2, ..., x_(N-1)
+
+LM := P(x_i+1 | x_i ) - state transition probability
+P(x_i+1 | x_i, x_i-1, x_i-2, ..., x_0) = P(x_i+1 | x_i )
+Markovian assumption
+
+P(x_0, x_1, x_2, ..., x_(N-1) | LM) - Likelihood
+= P(x_1 | LM) P(x_1 | x_0, LM) ... P(x_N-1 | x_N-2, LM)
+
+log(P(\product_i x_i|LM)) = \sum log(P(x_i+1 | x_i, LM))
+Log-Likelihood!
+
+21/08/2025
+Lec 6
+
+Advanced Topics:
+Exploiting Symmetry in Graph Search
+a         h
+ \       / 
+  b     g     
+   \   /
+    c-f          ~       S1-S2-S3-S4-S5
+   /   \
+  d     i  
+ /       \
+e         j  
+Symmetries captured by automorphism group
+Orbit-Stabilizer
+Very interesting insights
+Graph compression
+
+Adversarial Search:
+
+
+
+
+
+
+
+
+
+
+
+
+
+Exercise: MINIMAX Agent  
+Max
+                               /           \
+Min  
+               /           \                   /           \
+Max  
+           /   \           /   \           /   \           /   \
+Min
+        / \     / \     / \     / \     / \     / \     / \     / \
+leaf   8   7   5   6   4   3   2   7   7   5   6   4   3   2   7   8
+
+
+Exercise: Any saving possible?
+
+
+            /       |       \
+
+     /  |  \     /  |  \     /  |  \
+    3   12  8   2   4   6   14  5   2
+
+Exercise: (branching factor = 2)
+
+Leaf    10  5   7   11  12  8   9   8   5   12  11  12  9   8   7   10
+
+Exercise: Quiz-3
+
+Leaf    10  7   8   9   12  11  12  5   8   9   8   12  11  7   5   10
+
+
+Lec 7
+Probabilistic Graphical Models
+
+
+Advanced Topics:
+Lifted Inference in PGMs
+
