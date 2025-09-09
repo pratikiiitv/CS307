@@ -228,6 +228,9 @@ Log-Likelihood!
 21/08/2025
 Lec 6
 
+BFS as Matrix Vector Multiplication
+Dijkstra as Matrix Vector Multiplication
+
 Advanced Topics:
 Exploiting Symmetry in Graph Search
 a         h
@@ -245,18 +248,24 @@ Very interesting insights
 Graph compression
 
 Adversarial Search:
+Sequential Play
+Ply -> 2 ply -> 1 play
+Zero-sum games
 
+Pl1               (1,-1)
+                /        \
+Pl2       (1,-1)         (-4,4)
+        /       \       /       \
+Leaf (3,-3)  (1,-1)  (0,0)   (-4,4)
 
+Pl1           1             Max 
+           /      \     
+Pl2       1       -4        Min         
+         / \     / \   
+Leaf    3   1   0   -4      Utilities
 
-
-
-
-
-
-
-
-
-
+1 = max(min(3,1),min(0,-4))
+Value Backup Diagram
 
 Exercise: MINIMAX Agent  
 Max
@@ -269,28 +278,332 @@ Min
         / \     / \     / \     / \     / \     / \     / \     / \
 leaf   8   7   5   6   4   3   2   7   7   5   6   4   3   2   7   8
 
-
 Exercise: Any saving possible?
 
-
+Max                 >=3
             /       |       \
-
+Min     =3          <=2         =2
      /  |  \     /  |  \     /  |  \
     3   12  8   2   4   6   14  5   2
-
+    *   *   *   *   X   X   *   *   *
 Exercise: (branching factor = 2)
 
+Max                                 8
+                            /                   \
+Min                   7                             8
+                /           \                   /           \
+Max           7               >=8             11              >=8  
+            /   \           /   \           /   \           /   \
+Min       5       7       8               5       11      8       <=7  
+         / \     /  \    / \     / \     / \     / \     / \     / \
 Leaf    10  5   7   11  12  8   9   8   5   12  11  12  9   8   7   10
-
+        *   *   *   *   *   *   X   X   *   X   *   *   *   *   *   X
 Exercise: Quiz-3
 
+Max
+                            /                   \
+Min
+                /           \                   /           \
+Max
+            /   \           /   \           /   \           /   \
+Min
+         / \     /  \    / \     / \     / \     / \     / \     / \
 Leaf    10  7   8   9   12  11  12  5   8   9   8   12  11  7   5   10
 
-
+26/08/2025
 Lec 7
 Probabilistic Graphical Models
 
+## # A B C
+## 1 yes no yes
+## 2 no no yes
+## 3 yes yes no
+## 4 yes yes no                         Type of Queries!
+## 5 yes no no                          Joint Probability
+## 6 no no no                           P(A=y, B=y, C=y) = 1/20
+## 7 yes yes no                         P(A=y, B=y) = 8/20 = sum_c P(A=y,B=y,C=c)
+## 8 yes yes no                         Marginal Probability
+## 9 no no yes                          P(A=y | B=y) = 1
+## 10 yes no no                         P(B=y | A=y) = 8/12, P(B=n | A=y) = 4/12
+## 11 no no yes                         Conditional Probability
+## 12 yes no no                         sum_b P(B=b | A=y) = 1
+## 13 no no yes                         P(A=y) = 12/20, P(B=y) = 8/20
+## 14 yes yes no                        Interesting one:
+## 15 yes yes yes                       argmax_b P(B=b | A=y)        
+## 16 yes yes no
+## 17 no no no
+## 18 no no yes
+## 19 yes yes no
+## 20 no no no
 
-Advanced Topics:
-Lifted Inference in PGMs
+Joint Probability Table
+P(A, B, C) # 2^3
+P(A=a, B=b, C=c)
+
+Independent!
+P(A, B, C) = P(A) P(B) P(C)
+
+Graphical Models: Express random variables as vertices, 
+Dependencies between variables via edges -> Graph 
+Un/Directed Graphical Models
+Bayesian Networks
+Hidden Markov Model
+Kalman Filter
+...
+Markov Networks (Markov Random Fields)
+Markov Logic Network
+
+Data Table -> Structure Learning (Graph Building) -> Conditional Probability Tables
+
+Count -> Computing
+
+# 3 Vertices
+Directed Acyclic Graph
+A->B->C, A<-B->C, A<-B<-C, A->B<-C
+
+Factorization:
+P(A, B) = P(A | B) P(B) = P(B | A) P(A)
+P(A, B) = P(A) P(B|A)
+#10^2-1   #9   #90
+
+P(A|B) = P(B|A)P(A)/P(B) [Bayes Theorem]
+Posterior Probability = Likelihood * Prior / Evidence
+
+P(A, B, C) = P(A) P(BC|A) = P(A) P(B|A) P(C|AB)
+Chain-Rule of Conditional factorization
+P(X_1, X_2, X_3, X_4) = P(X_1)P(X_2|X_1)P(X_3|X_2,X_1)P(X_4|X_3,X_2,X_1)
+P(A, B, C, D) = P(A) P(BCD|A) = P(A) P(B|A) P(CD|AB) = P(A) P(B|A) P(C|AB) P(D|ABC) 
+P(X_1, X_2, ..., X_n) = P(X_1) \PI_i P(X_i | X_i-1,..., X_1)
+
+Definition:
+A Bayesian network consists of 
+- a directed acyclic graph (DAG) where each node is associated with a R.V. X_i
+- a set of conditional probability tables/ distributions for each node X_i given
+its parents Pa(X_i) in the graph: P(X_i|Pa(X_i))
+P(X_1, X_2, ..., X_n) = \PI_i P(X_i|Pa(X_i))
+
+Ex: X_1 -> X_2 -> X_3 -> X_4
+P(X_1,X_2,X_3,X_4) = P(X_1) P(X_2|X_1) P(X_3|X_2) P(X_4|X_3)
+
+Query: P(X_3=x_3 | X_1=x_1, X_2=x_2) = ?
+P(X_1,X_2,X_3) = sum_x_4 P(X_1,X_2,X_3,X_4)
+P(X_3=x_3 | X_1=x_1, X_2=x_2) = P(X_1=x_1, X_2=x_2, X_3=x_3)/P(X_1=x_1, X_2=x2)
+P(X_1,X_2) = sum_x_3 P(X_1,X_2,X_3)
+
+P(X_3=x_3 | X_1=x_1, X_2=x_2) = P(X_1=x_1, X_2=x_2, X_3=x_3)/P(X_1=x_1, X_2=x2)
+        = P(X_1=x_1)P(X_2=x_2|X_1=x_1)P(X_3=x_3|X_2=x_2)/P(X_1=x_1)P(X_2=x_2|X_1=x_1)
+        = P(X_3=x_3|X_2=x_2)
+
+Quiz-4
+Ex: E={X_1->X_2, x_3->X_2, X_2->X_4}
+(1) Write down the factorization of P(X_1,...,X_4)
+(2) P(X_1 | X_4) = ?
+(3) P(X_4 | X_1) = ?
+(4) P(X_1 | X_3) = ?
+(5) P(X_4 | X_1, X_2) = ?
+
+https://github.com/pratikiiitv/graphicalmodels
+
+28/08/2025
+Lec 8
+
+d-separation:
+X_1 -> X_2 -> X_3 -> X_4
+P(X_3=x_3 | X_1=x_1, X_2=x_2) = P(X_3=x_3|X_2=x_2)
+X_3 is independent of X_1 given X_2
+
+P(X|Y,Z) = P(X|Z)
+(X, Z, Y) -> X is independent of Y given Z
+Where X, Y and Z are \subsets {X_1, ..., X_n}
+I(X,Z,Y)
+
+X_1 -> X_2 -> X_3
+        ^   
+        |
+        X_4
+X_1 - it is raining
+X_2 - the pavement is wet
+X_3 - person slipped on the floor
+X_4 - water pipe is broken
+
+P(X_3|X_1=y,X_2=y) = P(X_3|X_2=y)
+P(X_4|X_2=y, X_1=y) != P(X_4|X_2) 
+
+Definition:
+A dependency model M over a finite set of elements {X_1, ..., X_n} is subset
+of tuples (triplets) (X,Z,Y) where X, Y and Z are three disjoint subsets of 
+{X_1,...,X_n}. This tuples (triplets) in M represent the independencies.
+i.e. (X,Z,Y) -> X and Y interact only via Z, X is independent of Y given Z
+-> P(X|Y,Z) = P(X|Z).
+
+Definition:
+Given a probability distribution P(X_1,...,X_n) on a set of variables U = {X_1,...,X_n}.
+A DAG G(U,E) is called a Bayesian network of P, iff G is a minimial edge 
+I-map of P.
+I_G \subset I_P
+
+I(X_i, Pa(X_i), U-{Pa(X_i)\union X_i})
+=> P(X_i | Pa(X_i), U-{Pa(X_i)\union X_i}) = P(X_i|Pa(X_i))
+
+I(X,Z,Y) \in I_G
+Z is said to d-separate X from Y
+
+How to check d-separation/ I(X,Z,Y)
+1. Construct an ancestral graph with varibles under consideration
+2. Moralization - put an edge between variables which have common child
+3. Remove directions
+4. Remove variables which are given in Z
+5. Check if there is any path from X to Y
+
+X_1->X_2<-X_3   P(X_1|X_2,X_3) = P(X_1|X_2) False!
+
+X_1->X_2->X_3   P(X_1|X_2,X_3) 
+                P(X_1,X_2,X_3)/P(X_2,X_3)
+                P(X_1)P(X_2|X_1)P(X_3|X_2)/P(X_2)P(X_3|X_2)
+                P(X_1)P(X_2|X_1)/P(X_2)
+                P(X_1|X_2)      True
+
+X_1<-X_2->X_3   P(X_1|X_2,X_3) = P(X_1|X_2) True
+
+2/09/2025
+Lec 9
+
+Undirected Graphical Model
+Markov Blanket
+
+G=({A,B,C,D},{AB, AC, BD, CD})
+Clique 
+Complete Graph
+Maximal Cliques
+
+Assuming A,...,D \in {0,1}
+\psi(A,B) :-> 00-> 100, 01->1, 10->1, 11->100
+\psi(A,C) :-> 00-> 30, 01->5, 10->1, 11->20
+\psi(B,D) :-> 00-> 1, 01->100, 10->90, 11->10
+\psi(C,D) :-> 00-> 100, 01->2, 10->3, 11->50
+
+P(A,B,C,D)~\psi(AB)\psi(AC)\psi(BD)\psi(CD)
+0000    3 x 10^5
+.
+.
+1111    1 x 10^6
+-----------------
+SUM  = Z -> Normalizing constant/ Partition function
+Z = sum_abcd \psi(A=a,B=b)\psi(A=a,C=c)\psi(B=b,D=d)\psi(C=c,D=d)
+  = sum_{A,B,C,D} \Pi_c\in Cliques \psi(X_c)
+
+Definition:
+An UGM represents a prob distribution P(X_1,...,X_N) defined by an undirected
+graph G:=(U={X_1,...,X_N},E) and a set of "potential" functions associated 
+with the cliques of G such that
+P(X_1,...,X_N) = \Pi_c\in C \psi(X_c) / Z
+C : Set of all cliques of G
+and Z is the partition function
+Z = sum_{X_1,...,X_N} \Pi_c\in C \psi(X_c)
+
+Theorem (Hammersley-Clifford):
+A positive distribution P(X=x)>0 satisfies the conditional independence 
+properties of an undirected graph G IFF P can be represented as a 
+product of factors, one per maximal clique, i.e.
+P(X=x) = \Pi_c\in C \psi(X_c) / Z
+Z = Zustandssumme -> sum over states
+
+Conditional Independence in Undirected Graph (simple graph)
+[G] Global Markov Property
+(X_A, X_C, X_B) - X_A is independent of X_B given X_C
+X_A \perp X_B | X_C
+X_C separates X_A from X_B
+If we remove all the nodes in C, there are no paths connecting
+any node in A to any node in B
+
+[L] Undirected Local Markov Property (HW)
+X_i \perp U \ cl{X_i} | mb{X_i}
+
+[P] Pairwise Markov Property
+X_i \perp X_j | U\{X_i,X_j}
+
+P(X=x)>0
+G->L->P->G
+
+Directed vs. Undirected
+
+               A->B<-C         A-B-C           A-B-C-A
+A \perp C       YES             NO              NO
+P(A|C)=P(A)
+
+A \perp C | B   NO              YES             NO
+P(A|B,C)=P(A|B)
+
+BTech students to take appointments and freeze project statements before 
+9th September (5:15-6:15).
+Quiz 5:
+Naive Bayes Classifier (Bayesian Network - Q5 from End-term 2024-25)
+8201 : 21 + 26 + 33 + 26  = 106
+ICD : 76
+
+2/09/2025
+Lab - Week 5
+Markov Random Field
+Potts Model 
+Example: Ising Model 
+Image Denoising
+
+04/09/2025
+Lec 10
+Hidden Markov Model
+
+09/09/2025
+Lec 11
+X = X_0, X_1, ..., X_T-1
+O = O_0, O_1, ..., O_T-1
+
+#
+Expectation Maximization
+
+Coin Flipping Experiment (X->Observations O, Z->Hidden states X)
+argmax log(P(O, X| \theta))
+\theta
+X_i = #heads in ten tosses -> O_i
+Z_i = #index of coin selected for ith turn -> X_i
+\theta = \theta_A, \theta_B -> biases of coins A and B
+Given X = X_1, X_2, ..., X_5
+Estimate \theta
+
+Procedure:
+1. Initial estimates - \theta_A_t, \theta_B_t
+2. X_i_t = argmax_{A,B} {P(O_i|\theta_A_t), P(O_i|\theta_B_t)}
+3. With X_i_t Estimate the \theta_A_t+1, \theta_B_t+1
+
+Ex:
+For number of coins {1,2,3}, find biases of coins given the following
+observation sequences
+1. HHHTTTHHTH
+2. HHHHHHTTTT
+3. HHTTTTTTTT
+4. HTHTHTHTHT
+5. THHHHHHHHT
+6. TTTTHTTTTH
+7. THTHTHTHTH
+8. HHHHTHHHHH
+9. HTTTTTTTTH
+Argue how many coins are there?
+Submit before next class.
+
+11/9/2025
+Lec 12
+
+
+
+
+
+
+
+*7th October (Tuesday)
+NVIDIA - Deep Learning (Workshop)
+
+
+
+
+
+
 
