@@ -551,6 +551,7 @@ Image Denoising
 04/09/2025
 Lec 10
 Hidden Markov Model
+Quiz 6 HMM
 
 09/09/2025
 Lec 11
@@ -574,7 +575,7 @@ Procedure:
 2. X_i_t = argmax_{A,B} {P(O_i|\theta_A_t), P(O_i|\theta_B_t)}
 3. With X_i_t Estimate the \theta_A_t+1, \theta_B_t+1
 
-Ex:
+Quiz 7
 For number of coins {1,2,3}, find biases of coins given the following
 observation sequences
 1. HHHTTTHHTH
@@ -589,8 +590,172 @@ observation sequences
 Argue how many coins are there?
 Submit before next class.
 
+Laboratory Week 6
+1. Read Chapters 20, 22 from ITILA, McKay (k-means clustering)
+2. 2020_em_clustering.csv (data for checking 2-class clustering algo)
+3. Attempt 10-bent coin problem
+Given the observation sequences 2020_ten_bent_coins.csv,
+find the bias values of coins.
+
 11/9/2025
 Lec 12
+Clustering HAC 
+Quiz 8
+Complexity of implementation min/ max HAC.
+
+16/09/2025
+Lec 13
+Decision Tree
+Data from an electronics shop is presented in Table.  
+The owner has assigned you a task to develop a predictive 
+algorithm based on the data for assessing the customer’s 
+inclination to buy a laptop.  Explain identification (decision) 
+tree for learning from categorical data (training set).  
+How to select an attribute for optimum tree depth? 
+How does entropy, a measure of disorder, help us in the process?  
+For the data in Table, create a decision tree.
+
+ID	Age	Salary	Graduate	Credit Rating	Buys Laptop
+1	Youth	High	No	Average	No
+2	Youth	High	No	Excellent	No
+3	Middle Aged	High	No	Average	Yes
+4	Senior	Medium	No	Average	Yes
+5	Senior	Low	Yes	Average	Yes
+6	Senior	Low	Yes	Excellent	No
+7	Middle Aged	Low	Yes	Excellent	Yes
+8	Youth	Medium	No	Average	No
+9	Youth	Low	Yes	Average	Yes
+10	Senior	Medium	Yes	Average	Yes
+11	Youth	Medium	Yes	Excellent	Yes
+12	Middle Aged	Medium	No	Excellent	Yes
+13	Middle Aged	High	Yes	Average	Yes
+14	Senior	Medium	No	Excellent	No
+
+Start/ Root
+14 DP : 9 Y, 5 N
+H = 0.94
+
+Q1. Age?
+Youth           Middle          Senior
+5               4               5
+2Y, 3N          4Y, 0N          3Y, 2N 
+H = .97         H = 0           H = 0.97
+
+H_avg_age = \sum_i\in{Y,M,S} p_i * H_age(i)
+H_avg_age = 5/14 * 0.97 + 4/14 * 0 + 5/14 * 0.97 = 0.69
+
+Q1. Salary?
+High            Medium          Low
+4               6               4
+2Y, 2N          4Y, 2N          3Y, 1N
+H = 1           H = .92         H = .81
+
+H_avg_salary = 0.91
+
+Entropy:
+A source emitting N symbols with probabilities 
+p_1,...,p_N the entropy of the source is defined as
+(\log is considered w.r.t. base 2)
+H(X) = -\sum_i pi \log pi
+
+Ex: N = 2
+Q. p_1=p_2=.5 what is H? 1
+Q. p_1=1 what is H? 0
+
+Ex: N=4
+Q. Equiprobable outcomes? H? 2
+
+Exercise:
+Let S be a source emitting two symbols with 
+probabilities p and 1-p. Plot Entropy as a 
+function of p.
+
+H(X) = 0.94
+H(X|Y) = H(X,Y) - H(Y) (Conditional/ Relative Entropy)
+H(X|Y) = \sum_y H(X|Y=y) p(y)
+
+Splitting Criteria:
+Information Gain(Q) = H(Node) - H_Q_avg(Children)
+
+I(age) = 0.94 - 0.69
+I(salary) = 0.94 - 0.91
+I(graduate) = 0.94 - 0.79
+I(credit rating) = 0.94 - 0.89 
+
+So the first question should be about ?
+What about next question?
+
+Quiz 9 : Submission - 18th September before 10:45 am
+
+Associative network 
+
+x \in \mathbb{R}^N (Input)
+y \in \mathbb{R}^M (Output)
+x_Nx1 -> W -> y_Mx1 
+y_Mx1 -> W' -> x_Nx1 
+
+x = [x_1 x_2 ... x_N]'
+y = [y_1 y_2 ... y_M]'
+
+x0 -> W -> y0 -> W' -> x1 -> W -> y1 -> W' -> x2 ...
+
+yi = sgn(W*xi) / introducing nonlinearity
+\exist an i such that xi+1 = xi and yi+1 = yi
+we say xi and yi are fixed points of dynamical system
+Fixed point?
+
+x->cos(x)->cos(cos(x))->cos(cos(cos(x)))->...
+For a continuous f:[0,1]->[0,1], \exists x such that 
+f(x) = x.
+
+Bidirectional Associative Memory
+Hebbian Learning Rule (x,y) as fixed point!
+W = y*x'
+sgn(W*x) = sgn(y*x'*x)
+y = sgn(W*x) || Expectation
+
+sgn(W'*y) = sgn(x*y'*y)
+x = sgn(W'*y)
+
+N = 3, M = 2
+x = [-1 1 1]', y = [-1 -1]'
+W = [[1 -1 -1][1 -1 -1]]
+
+small purturbed x_ = [-.5 .2 .09]'
+x__ = [-1 1 -1]' 
+
+For a set of vector pairs {(x1,y1), ... ,(xk,yk)}
+W = \sum_i yi * xi'
+
+Energy Function
+(x,y) is a stable state w.r.t. y=sgn(W*x)
+y0 = sgn(W*x0)
+x1 = sgn(W'*y0)
+
+x0 and x1 should be close to each other, in other words
+Think of W'*y0 as the error e
+
+E = -x0'*e = -x0'*w'*y0 = -e'*x_0 = -y0'*W*x0
+Find W such that E is minimum.
+
+Hopefield network
+W is symmetric.
+E = -x'*W*x
+
+
+
+Associative Memory 
+Boltzman Machine 
+
+
+
+
+
+18/09/2025
+Lec 14
+Magic number 7+-2
+Decision Making 
+Analytic Hierarchical Process (Saaty)
 
 
 
@@ -598,7 +763,12 @@ Lec 12
 
 
 
-*7th October (Tuesday)
+
+
+
+*14/15th October (Tuesday for GN BTech)
+*16/17th October (Thursday for ICD BTech and All MTech)
+PyTorch
 NVIDIA - Deep Learning (Workshop)
 
 
